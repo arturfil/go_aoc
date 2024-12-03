@@ -24,12 +24,6 @@ var reports [][]int
 func PartOne() {
 	count := 0
 
-	// reports, err := processProblemInput()
-	// if err != nil {
-	//     log.Fatalf("Error %v", err)
-	//     return
-	// }
-
 	for _, report := range reports {
 		if isSafe(report) {
 			count++
@@ -41,12 +35,6 @@ func PartOne() {
 
 func PartTwo() {
 	count := 0
-
-	// reports, err := processProblemInput()
-	// if err != nil {
-	//     log.Fatalf("Error %v", err)
-	//     return
-	// }
 
 	for _, report := range reports {
 		for i := range report {
