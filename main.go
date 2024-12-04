@@ -1,11 +1,9 @@
 package main
 
 import (
-	"github.com/arturfil/go_aoc/day2"
+	"github.com/arturfil/go_aoc/day3"
 )
 
-
 func main() {
-    day2.ProcessInput()
-    day2.PartTwo()
+	day3.PartTwoAlt()
 }

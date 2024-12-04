@@ -16,19 +16,19 @@ func Abs(x int) int {
 // Scan text file
 func ReadInput(path string) ([]string, error) {
 	file, err := os.Open(path)
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    defer file.Close()
+	defer file.Close()
 
-    var lines []string
-    scan := bufio.NewScanner(file)
+	var lines []string
+	scan := bufio.NewScanner(file)
 
-    for scan.Scan() {
-        line := scan.Text()
-        lines = append(lines, line)
-    }
+	for scan.Scan() {
+		line := scan.Text()
+		lines = append(lines, line)
+	}
 
-    return lines, scan.Err()
+	return lines, scan.Err()
 }
