@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
-	day3.PartTwoAlt()
+	day3.PartOne()
+	// day3.PartTwo()
 }

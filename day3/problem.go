@@ -2,69 +2,71 @@ package day3
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"regexp"
 	"strconv"
+
+	"github.com/arturfil/go_aoc/helpers"
 )
 
 func PartOne() {
-
-	file, err := os.ReadFile("./day3/input.txt")
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-
-	pattern := `mul\(\d{1,3},\d{1,3}\)`
+	file, _ := helpers.ReadInput("./day3/input.txt")
+    
+	pattern := `(do\(\)|don't\(\))|mul\((\d+),(\d+)\)`
 	re := regexp.MustCompile(pattern)
-	matches := re.FindAllString(string(file), -1)
 
-	totScore := calculate(matches)
+    var matches [][]string 
+    for _, line := range file {
+        match := re.FindAllStringSubmatch(line, -1)
+        fmt.Println("match -> \n", match)
+        matches = append(matches, match...)
+    }
 
-	fmt.Println("tot score:", totScore)
+    for _, match := range matches {
+       fmt.Println("match", match) 
+    }
+
+    totScore := calculateScore(matches, false)
+    fmt.Println("Tot Score:", totScore)
 }
 
-func PartTwoAlt() {
+func PartTwo() {
+	file, _ := helpers.ReadInput("./day3/input.txt")
 
-	file, err := os.ReadFile("./day3/input.txt")
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
+	validPattern := `(do\(\)|don't\(\))|mul\((\d+),(\d+)\)`
+    re := regexp.MustCompile(validPattern)
 
-	ignorePattern := `don't\(\)(.*?)do\(\)`
-	re := regexp.MustCompile(ignorePattern)
+    // find all matches in sample
+    var matches [][]string
+    for _, line := range file {
+        match := re.FindAllStringSubmatch(line, -1)
+        matches = append(matches, match...)
+    }
 
-	// First replace all don't()...do() sections with just do()
-	cleanText := re.ReplaceAllString(string(file), "do()")
-
-	pattern := `mul\(\d{1,3},\d{1,3}\)`
-	re = regexp.MustCompile(pattern)
-	matches := re.FindAllString(cleanText, -1)
-
-	totScore := calculate(matches)
-	fmt.Println("Tot Score: ", totScore)
-
+    totScore := calculateScore(matches, true)
+    fmt.Println("Tot Score:", totScore)
 }
 
-func calculate(matches []string) int {
+func calculateScore(matches [][]string, isControlled bool) int {
 	var totScore int
+    enabled := true
 
 	for _, match := range matches {
 
-		re := regexp.MustCompile(`\d+`)
-		numbers := re.FindAllString(match, -1)
+        if match[1] == "don't()" && isControlled {
+            enabled = false
+            continue
+        }
+        if match[1] == "do()" && isControlled {
+            enabled = true
+            continue
+        }
 
-		var nums []int
+        if enabled {
+            n1, _ := strconv.Atoi(match[2])
+            n2, _ := strconv.Atoi(match[3])
 
-		for _, num := range numbers {
-			n, _ := strconv.Atoi(num)
-			nums = append(nums, n)
-		}
-
-		totScore += nums[0] * nums[1]
-		// fmt.Println("numbers-> ", numbers)
+            totScore += n1 * n2
+        }
 	}
 
 	return totScore
